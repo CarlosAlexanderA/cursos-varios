@@ -1,0 +1,21 @@
+{
+  "name": "clase-1",
+  "version": "1.0.0",
+  "description": "curso de introduccion de midudev",
+  "main": "2.file-system.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "picocolors": "1.0.0"
+  },
+  "devDependencies": {
+    "standard": "^17.1.0"
+  },
+  "eslintConfig": {
+    "extends": "standard"
+  }
+}
