@@ -1,11 +1,30 @@
 const express = require('express')
 const movies = require('./movies.json')
+// usando la libreria de cors
+const cors = require('cors')
 const crypto = require('node:crypto')
 const { validateMovie, validatePartialMovie } = require('./schemas/movies')
+const { callbackify } = require('node:util')
 
 const app = express()
-
 app.use(express.json())
+app.use(cors({
+  origin: (origin, callback) => {
+    const ACCEPTED_ORIGINS = [
+      'http://localhost:8080',
+      'http://localhost:1234',
+      'http://movies.com'
+    ]
+    if (ACCEPTED_ORIGINS.includes(origin)) {
+      return callback(null, true)
+    }
+    if (!origin) {
+      return callback(null, true)
+    }
+    return callback(new Error('Not allowed by CORS'))
+  }
+})) // por defecto pone todo con *
+// es decir que permite todo tipo de rutas
 
 app.disable('x-powered-by') // desabilitar el header X-Powered-By: Express
 
@@ -14,22 +33,10 @@ app.get('/', (req, res) => {
 })
 
 // metodos normales: GET/HEAD/POST -> CORS PRE-Filght
-// metodos complejps: PUT/PATCH/DELETE -> OPTIONS
+// metodos complejps: PUT/PATCH/DELET -> OPTIONS
 
-const ACCEPTED_ORIGINS = [
-  'http://localhost:8080',
-  'http://localhost:1234',
-  'http://movies.com'
-
-]
 // todos los recursos que sean MOVIES se identifica con /movies
 app.get('/movies', (req, res) => {
-  const origin = req.header('origin')
-
-  // cuando la peticion es del mismo ORIGIN no se envia el origin
-  // http://localhost:1234 -> http://localhost:1234
-  if (ACCEPTED_ORIGINS.includes(origin) || !origin) res.header('Access-Control-Allow-Origin', origin)
-
   const { genre } = req.query
 
   if (genre) {
@@ -61,11 +68,6 @@ app.post('/movies', (req, res) => {
 })
 
 app.delete('/movies/:id', (req, res) => {
-  const origin = req.header('origin')
-
-  if (ACCEPTED_ORIGINS.includes(origin) || !origin) {
-    res.header('Access-Control-Allow-Origin', origin)
-  }
   const { id } = req.params
   const movieIndex = movies.findIndex(movie => movie.id === id)
 
@@ -101,16 +103,6 @@ app.get('/movies/:id', (req, res) => {
   if (movie) return res.json(movie)
 
   res.status(404).json({ message: 'movie not found' })
-})
-
-app.options('/movies/:id', (req, res) => {
-  const origin = req.header('origin')
-
-  if (ACCEPTED_ORIGINS.includes(origin) || !origin) {
-    res.header('Access-Control-Allow-Origin', origin)
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE')
-  }
-  res.send(200)
 })
 
 const PORT = process.env.PORT ?? 1234
