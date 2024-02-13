@@ -3,19 +3,32 @@ import logger from 'morgan'
 
 import {Server} from 'socket.io'
 import {createServer} from 'node:http'
+import { createClient } from '@libsql/client/.'
 
 
 const port = process.env.PORT ?? 3000
 
 const app = express()
 const server = createServer(app)
-const io = new Server(server)
+const io = new Server(server, {
+  connectionStateRecovery:{}
+})
+
+const db= createClient({
+  url:"libsql://open-omega-red-carlosalexandera.turso.io",
+  authToken: process.env.DB_TOKEN
+})
+
 
 io.on('connection',(socket)=>{
   console.log('a user has connected');
 
   socket.on('disconnect', ()=>{
     console.log('an user has disconnected');
+  })
+
+  socket.on('chat message', msg => {
+    io.emit('chat message', msg)
   })
 })
 
@@ -27,5 +40,5 @@ app.get('/',(req, res)=>{
 })
 
 server.listen(port,()=>{
-  console.log(`Server  running on port ${port}`);
+  console.log(`Server running http://localhost:${port}`);
 })
