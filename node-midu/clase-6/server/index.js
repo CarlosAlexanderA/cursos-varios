@@ -19,6 +19,7 @@ const db= createClient({
   authToken: process.env.DB_TOKEN
 })
 
+await db.execute()
 
 io.on('connection',(socket)=>{
   console.log('a user has connected');
