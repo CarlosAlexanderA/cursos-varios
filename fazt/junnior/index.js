@@ -1,7 +1,18 @@
 import express from 'express'
+import morgan from 'morgan'
 
 const PORT = process.env.PORT || 3030
 const app = express()
+
+// middelware -> se puede tener varios
+// app.use((req, res, next) => {
+//   console.log(`Route: ${req.url} Method: ${req.method}`)
+
+//   next()
+// })
+
+// usando morgan
+app.use(morgan('dev'))
 
 // para entender el texto del lado del cliente -> servidor
 app.use(express.text())
@@ -67,6 +78,18 @@ app.get('/user', (req, res) => {
 app.post('/user', (req, res) => {
   console.log(req.body)
   res.send('Nuevo usuario creado')
+})
+
+app.use((req, res, next) => {
+  if (req.query.login === 'carlos@algo.com') {
+    next()
+  } else {
+    res.send('no autorizado')
+  }
+})
+
+app.get('/dashboard', (req, res) => {
+  res.send('dashboard')
 })
 
 app.use((req, res) => {
