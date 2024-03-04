@@ -1,8 +1,10 @@
 import express from 'express'
 import morgan from 'morgan'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const PORT = process.env.PORT || 3030
-const app = express()
+const PORT = process.env.PORT || 3000
+export const app = express()
 
 // middelware -> se puede tener varios
 // app.use((req, res, next) => {
@@ -11,13 +13,18 @@ const app = express()
 //   next()
 // })
 
-// usando morgan
-app.use(morgan('dev'))
-
 // para entender el texto del lado del cliente -> servidor
 app.use(express.text())
 
+// usando morgan
+app.use(morgan('dev'))
+
 app.use(express.json())
+// Configuración del directorio estático
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+app.use(express.static(path.join(__dirname, 'public')))// -> se hace publico y puees acceder desde el mismo navegador
+// .../index.css, etc
 
 // funciona con todos los metodos
 // GET, POST, PUT, ...
@@ -80,17 +87,14 @@ app.post('/user', (req, res) => {
   res.send('Nuevo usuario creado')
 })
 
-app.use((req, res, next) => {
-  if (req.query.login === 'carlos@algo.com') {
-    next()
-  } else {
-    res.send('no autorizado')
-  }
-})
-
-app.get('/dashboard', (req, res) => {
-  res.send('dashboard')
-})
+// autentificacion
+// app.use((req, res, next) => {
+//   if (req.query.login === 'carlos@algo.com') {
+//     next()
+//   } else {
+//     res.send('no autorizado')
+//   }
+// })
 
 app.use((req, res) => {
   res.status(404).send('pagina no encontrada')

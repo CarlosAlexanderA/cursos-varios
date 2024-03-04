@@ -9,8 +9,19 @@ let products = [{
   price: 3000
 }]
 
+// settings
+app.set('case sensitive routing', true) // -> rutas con case sensitive
+app.set('app name', 'api simple')
+
+// middelwares
 app.use(morgan('dev'))
 app.use(express.json())
+
+// routes
+
+app.get('/UserName', (req, res) => {
+  res.send('username page')
+})
 
 app.get('/products', (req, res) => {
   res.json(products)
@@ -54,5 +65,5 @@ app.get('/products/:id', (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
+  console.log(`Server ${app.get('app name')} running on http://localhost:${PORT}`)
 })
