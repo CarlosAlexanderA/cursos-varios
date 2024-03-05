@@ -3,7 +3,14 @@ import morgan from 'morgan'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import HomeRoutes from './routes/home.js'
+import UserRoutes from './routes/users.js'
+
 const PORT = process.env.PORT || 3000
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 export const app = express()
 
 // middelware -> se puede tener varios
@@ -13,6 +20,11 @@ export const app = express()
 //   next()
 // })
 
+// settings
+app.set('appName', 'Express Simple')
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'))
+
 // para entender el texto del lado del cliente -> servidor
 app.use(express.text())
 
@@ -21,13 +33,15 @@ app.use(morgan('dev'))
 
 app.use(express.json())
 // Configuración del directorio estático
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+
 app.use(express.static(path.join(__dirname, 'public')))// -> se hace publico y puees acceder desde el mismo navegador
 // .../index.css, etc
 
+app.use(HomeRoutes)
+app.use(UserRoutes)
+
 // funciona con todos los metodos
-// GET, POST, PUT, ...
+// GET, POST, PUT, ...0
 app.all('/info', (req, res) => {
   res.send('server info')
 })

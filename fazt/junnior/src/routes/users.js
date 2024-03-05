@@ -1,10 +1,13 @@
-import { app } from '../index.js'
+import { Router } from 'express'
+const router = Router()
 
-app.get('/Username', (req, res) => {
+router.get('/Username', (req, res) => {
   res.send('username route')
 })
 
-app.get('/profile', (req, res) => {
+router.get('/profile', (req, res) => {
   console.log(req.body)
   res.send('profile page')
 })
+
+export default router
