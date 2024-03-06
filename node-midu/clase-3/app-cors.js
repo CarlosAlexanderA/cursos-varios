@@ -4,7 +4,6 @@ const movies = require('./movies.json')
 const cors = require('cors')
 const crypto = require('node:crypto')
 const { validateMovie, validatePartialMovie } = require('./schemas/movies')
-const { callbackify } = require('node:util')
 
 const app = express()
 app.use(express.json())
