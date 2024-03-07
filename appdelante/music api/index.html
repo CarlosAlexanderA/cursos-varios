@@ -4,15 +4,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
   <title>Page inicio</title>
 </head>
 
 <body>
 
   <h1>hello from html</h1>
-  <ul id="list">
+  <div>
+    <ul id="list">
+    </ul>
 
-  </ul>
+    <div>
+      <audio id="audio" controls></audio>
+    </div>
+  </div>
+  <form action="/songs/" method="post" class="form-upload" enctype="multipart/form-data">
+    <p>subir cancion: </p>
+    <input type="file" name="song" id="song">
+    <input type="submit" value="Subir">
+  </form>
   <script src="/js/main.js"></script>
 </body>
 
