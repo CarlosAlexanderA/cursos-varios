@@ -6,9 +6,11 @@ export default function RegisterPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const registerUser = async () => {
+  const registerUser = async e => {
+    e.preventDefault()
+
     try {
-      const res = await fetch(`${baseUrl}/`, {
+      const res = await fetch(`${baseUrl}/register`, {
         method: 'POST', // Cambiar el método a 'POST'
         headers: {
           'Content-Type': 'application/json' // Especificar el tipo de contenido JSON
@@ -33,10 +35,7 @@ export default function RegisterPage() {
     <div className="mt-4 grow flex items-center justify-around">
       <div className="mb-64">
         <h1 className="text-4xl font-medium text-center mb-4">Register</h1>
-        <form
-          action="#"
-          className="max-w-md mx-auto"
-          onSubmit={() => registerUser()}>
+        <form action="#" className="max-w-md mx-auto" onSubmit={registerUser}>
           <input
             type="text"
             placeholder="Jon Doe"

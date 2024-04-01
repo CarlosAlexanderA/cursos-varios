@@ -49,8 +49,8 @@ export function Header() {
       {/* hamburguer menu */}
       <Link
         to="/login"
-        className=" border border-gray-300 rounded-full py-2 px-4 hover:shadow-md shadow-gray-300">
-        <button className="flex gap-2 items-center">
+        className="flex items-center border border-gray-300 rounded-full py-2 px-4 hover:shadow-md shadow-gray-300">
+        <button className="flex gap-2 items-center bg-transparent">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
