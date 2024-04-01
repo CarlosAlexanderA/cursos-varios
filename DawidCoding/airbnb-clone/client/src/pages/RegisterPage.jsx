@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { baseUrl } from '../constants'
+import axios from 'axios'
 
 export default function RegisterPage() {
   const [name, setName] = useState('')
@@ -10,22 +10,11 @@ export default function RegisterPage() {
     e.preventDefault()
 
     try {
-      const res = await fetch(`${baseUrl}/register`, {
-        method: 'POST', // Cambiar el método a 'POST'
-        headers: {
-          'Content-Type': 'application/json' // Especificar el tipo de contenido JSON
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password
-          /* datos que deseas enviar en el cuerpo de la solicitud */
-        })
+      await axios.post('register', {
+        name,
+        email,
+        password
       })
-
-      const json = await res.json()
-      console.log(json)
-      return json
     } catch (error) {
       console.error('Error al registrar usuario:', error)
       throw error // Manejo de errores opcional

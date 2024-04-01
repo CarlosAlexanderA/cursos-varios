@@ -1,31 +1,26 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
-import { baseUrl } from '../constants.js'
+import axios from 'axios'
+import { UserContext } from '../context/UserContext'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [redirect, setRedirect] = useState(false)
+
+  const { setUser } = useContext(UserContext)
   const handleLoginSubmit = async e => {
     e.preventDefault()
 
     try {
-      const res = await fetch(`${baseUrl}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email,
-          password
-        }),
-        credentials: 'include'
+      const { data } = await axios.post('/login', {
+        email,
+        password
       })
-
-      const json = await res.json()
+      setUser(data)
       console.log('login succesful')
+
       setRedirect(true)
-      return json
     } catch (error) {
       console.error('Error al Ingresar:', error)
       throw error

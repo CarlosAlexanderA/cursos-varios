@@ -5,16 +5,20 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { config } from 'dotenv'
 import { UserModel } from './models/User.js'
+import cookieParser from 'cookie-parser'
 
 config()
 
 const bcryptSalt = bcrypt.genSaltSync(10) // exriptado de password
 const jwtSecret = 'asdfghjklqwertyuiopzxcvbnm' // secret token
+const PORT = process.env.PORT ?? 4000
+const ACCEPTED_ORIGINS = ['http://localhost:5173', 'https://localhost:4000']
 
 const app = express()
-const PORT = process.env.PORT ?? 4000
+
+// middlewares
 app.use(express.json())
-const ACCEPTED_ORIGINS = ['http://localhost:5173', 'https://localhost:4000']
+app.use(cookieParser())
 
 app.use(
   cors({
@@ -26,7 +30,6 @@ app.use(
     }
   })
 )
-app.use(cors())
 
 app.disable('x-powered-by') // desabilitar el header X-Powered-By: Express
 await mongoose.connect(process.env.MONGO_URL)
@@ -69,7 +72,7 @@ app.post('/login', async (req, res) => {
           {},
           (err, token) => {
             if (err) throw err
-            res.cookie('token', token).json('pass ok')
+            res.cookie('token', token).json(userDoc)
           }
         )
       } else {
@@ -82,6 +85,21 @@ app.post('/login', async (req, res) => {
     console.log(error)
     res.status(422).json(error)
   }
+})
+
+// get info profile
+app.get('/profile', (req, res) => {
+  const { token } = req.cookies
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err
+      const { name, email, _id } = await UserModel.findById(userData.id)
+      res.json({ name, email, _id })
+    })
+  } else {
+    res.json(null)
+  }
+  res.json('user info')
 })
 
 app.get('/test', (req, res) => {
