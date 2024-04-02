@@ -50,7 +50,7 @@ export function Header() {
       {/* end SerachBar */}
       {/* hamburguer menu */}
       <Link
-        to="/login"
+        to={user ? '/account' : '/login'}
         className="flex items-center border border-gray-300 rounded-full py-2 px-4 hover:shadow-md shadow-gray-300">
         <button className="flex gap-2 items-center bg-transparent">
           <svg

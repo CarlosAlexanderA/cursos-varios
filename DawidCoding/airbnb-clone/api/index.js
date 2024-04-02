@@ -99,7 +99,11 @@ app.get('/profile', (req, res) => {
   } else {
     res.json(null)
   }
-  res.json('user info')
+})
+
+// close session
+app.post('/logout', (req, res) => {
+  res.cookie('token', '').json(true)
 })
 
 app.get('/test', (req, res) => {
