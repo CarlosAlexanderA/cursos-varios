@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import imageDownloader from 'image-downloader'
 import { config } from 'dotenv'
 import { UserModel } from './models/User.js'
 import cookieParser from 'cookie-parser'
@@ -12,7 +13,11 @@ config()
 const bcryptSalt = bcrypt.genSaltSync(10) // exriptado de password
 const jwtSecret = 'asdfghjklqwertyuiopzxcvbnm' // secret token
 const PORT = process.env.PORT ?? 4000
-const ACCEPTED_ORIGINS = ['http://localhost:5173', 'https://localhost:4000']
+const ACCEPTED_ORIGINS = [
+  'http://localhost:5173',
+  'https://localhost:4000',
+  'https://127.0.0.1:5173'
+]
 
 const app = express()
 
@@ -104,6 +109,15 @@ app.get('/profile', (req, res) => {
 // close session
 app.post('/logout', (req, res) => {
   res.cookie('token', '').json(true)
+})
+
+app.post('/upload-by-link', async (req, res) => {
+  const { link } = req.body
+
+  const newName = Date.now() + '.jpg'
+  const directory = process.cwd() + '/uploads/' + newName
+  await imageDownloader.image({ url: link, dest: directory })
+  res.json(newName)
 })
 
 app.get('/test', (req, res) => {
