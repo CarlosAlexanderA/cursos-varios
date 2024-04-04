@@ -1,10 +1,19 @@
 import React from 'react'
 
 export function Perks({ selected, onChange }) {
+  const handleCheckBoxClick = e => {
+    const { checked, name } = e.target
+    if (checked) {
+      onChange([...selected, name])
+    } else {
+      onChange([...selected.filter(selectedName => selectedName !== name)])
+    }
+    console.log(e.target.selected)
+  }
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mt-2">
       <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer">
-        <input type="checkbox" />
+        <input type="checkbox" name="wifi" onChange={handleCheckBoxClick} />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -22,7 +31,7 @@ export function Perks({ selected, onChange }) {
         <span>Wifi</span>
       </label>
       <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer">
-        <input type="checkbox" />
+        <input type="checkbox" name="parking" onChange={handleCheckBoxClick} />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -40,7 +49,7 @@ export function Perks({ selected, onChange }) {
         <span>Free parking spot</span>
       </label>
       <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer">
-        <input type="checkbox" />
+        <input type="checkbox" name="tv" onChange={handleCheckBoxClick} />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -58,7 +67,7 @@ export function Perks({ selected, onChange }) {
         <span>Tv</span>
       </label>
       <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer">
-        <input type="checkbox" />
+        <input type="checkbox" name="radio" onChange={handleCheckBoxClick} />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -76,7 +85,7 @@ export function Perks({ selected, onChange }) {
         <span>Radio</span>
       </label>
       <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer">
-        <input type="checkbox" />
+        <input type="checkbox" name="pets" onChange={handleCheckBoxClick} />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -94,7 +103,7 @@ export function Perks({ selected, onChange }) {
         <span>Pets</span>
       </label>
       <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer">
-        <input type="checkbox" />
+        <input type="checkbox" name="entrance" onChange={handleCheckBoxClick} />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

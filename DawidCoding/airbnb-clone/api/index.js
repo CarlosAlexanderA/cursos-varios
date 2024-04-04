@@ -7,7 +7,11 @@ import imageDownloader from 'image-downloader'
 import { config } from 'dotenv'
 import { UserModel } from './models/User.js'
 import cookieParser from 'cookie-parser'
+// packaging managment
+import multer from 'multer'
 
+import fs from 'fs'
+import { PlaceModel } from './models/Place.js'
 config()
 
 const bcryptSalt = bcrypt.genSaltSync(10) // exriptado de password
@@ -35,6 +39,8 @@ app.use(
     }
   })
 )
+
+app.use('/uploads', express.static(process.cwd() + '/uploads'))
 
 app.disable('x-powered-by') // desabilitar el header X-Powered-By: Express
 await mongoose.connect(process.env.MONGO_URL)
@@ -114,16 +120,80 @@ app.post('/logout', (req, res) => {
 app.post('/upload-by-link', async (req, res) => {
   const { link } = req.body
 
-  const newName = Date.now() + '.jpg'
+  const newName = 'photo' + Date.now() + '.jpg'
   const directory = process.cwd() + '/uploads/' + newName
   await imageDownloader.image({ url: link, dest: directory })
   res.json(newName)
 })
-
-app.get('/test', (req, res) => {
-  res.json({ status: 'ok' })
+// get photo img
+app.post('/upload-by-link/:photo', async (req, res) => {
+  res.sendFile({})
 })
 
+// create phot form file
+
+const photosMiddleware = multer({ dest: 'uploads/' })
+app.post('/upload', photosMiddleware.array('photos', 100), (req, res) => {
+  const uploadedFiles = []
+  for (let i = 0; i < req.files.length; i++) {
+    const { path, originalname } = req.files[i]
+    const parts = originalname.split('.')
+    const ext = parts[parts.length - 1]
+    const newPath = path + '.' + ext
+    fs.renameSync(path, newPath)
+    uploadedFiles.push(newPath.replace('uploads/', ''))
+  }
+  res.json(uploadedFiles)
+  console.log(uploadedFiles)
+})
+
+// save datas form places
+app.post('/places', async (req, res) => {
+  const { token } = req.cookies
+  const {
+    title,
+    address,
+    addedPhotos,
+    description,
+    perks,
+    extraInfo,
+    checkIn,
+    checkOut,
+    maxGuests
+  } = req.body
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) throw err
+    const placeDoc = await PlaceModel.create({
+      owner: userData.id,
+      title,
+      address,
+      photos: addedPhotos,
+      description,
+      perks,
+      extraInfo,
+      checkIn,
+      checkOut,
+      maxGuests
+    })
+
+    res.json(placeDoc)
+  })
+})
+
+// get all places from user
+app.get('/places', async (req, res) => {
+  const { token } = req.cookies
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) throw err
+
+    const { id } = userData
+    res.json(await PlaceModel.find({ owner: id }))
+  })
+})
+
+app.get('/test', async (req, res) => {
+  res.json({ response: 'ok' })
+})
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
 })
