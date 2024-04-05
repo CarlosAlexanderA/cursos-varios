@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import AccountNav from '../components/AccountNav'
 import axios from 'axios'
+import { baseUrl } from '../constants'
 
 export function PlacesPage() {
   const [places, setPlaces] = useState([])
@@ -39,13 +40,15 @@ export function PlacesPage() {
               to={`/account/places/${place._id}`}
               key={index}
               className="flex gap-4 bg-gray-200 rounded-2xl p-4 cursor-pointer hover:bg-gray-300/70 transition-colors duration-200">
-              <div className="w-32 h-32 bg-gray-300 shrink-0">
+              <div className="w-32 h-32 bg-gray-300 shrink-0 relative">
                 {place.photos.length > 0 && (
-                  <img
-                    className="object-cover w-full h-full"
-                    src={place.photos[0]}
-                    alt={place.title}
-                  />
+                  <>
+                    <img
+                      className="object-cover w-full h-full"
+                      src={`${baseUrl}/uploads/${place.photos[0]}`}
+                      alt={place.title}
+                    />
+                  </>
                 )}
               </div>
               <div>

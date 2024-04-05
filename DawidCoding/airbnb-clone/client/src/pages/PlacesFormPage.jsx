@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PhotosUploader } from '../components/PhotosUploader'
 import { Perks } from '../components/Perks'
 import AccountNav from '../components/AccountNav'
@@ -18,10 +18,26 @@ export function PlacesFormPage() {
   const [checkOut, setCheckOut] = useState('')
   const [maxGuests, setMaxGuests] = useState('')
   const [redirect, setRedirect] = useState(false)
-
-  const addNewPlace = async e => {
+  useEffect(() => {
+    if (!id) {
+      return
+    }
+    axios.get('/places/' + id).then(res => {
+      const { data } = res
+      setTitle(data.title)
+      setAddress(data.address)
+      setAddedPhotos(data.photos)
+      setDescription(data.description)
+      setPerks(data.perks)
+      setExtraInfo(data.extraInfo)
+      setCheckIn(data.checkIn)
+      setCheckOut(data.checkOut)
+      setMaxGuests(data.maxGuests)
+    })
+  }, [id])
+  const savePlace = async e => {
     e.preventDefault()
-    await axios.post('/places', {
+    const placeData = {
       title,
       address,
       addedPhotos,
@@ -31,7 +47,17 @@ export function PlacesFormPage() {
       checkIn,
       checkOut,
       maxGuests
-    })
+    }
+    if (id) {
+      // update
+      await axios.put('/places', {
+        id,
+        ...placeData
+      })
+    } else {
+      // create new place
+      await axios.post('/places', placeData)
+    }
     setRedirect(true)
   }
 
@@ -42,7 +68,7 @@ export function PlacesFormPage() {
   return (
     <div>
       <AccountNav />
-      <form onSubmit={addNewPlace}>
+      <form onSubmit={savePlace}>
         <h2 className="text-2xl mt-4">Title</h2>
         <p className="text-gray-500 text-sm">
           Title for your, should be short and catchy as in advertisement
