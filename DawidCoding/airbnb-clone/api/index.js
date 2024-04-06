@@ -244,21 +244,42 @@ app.get('/places', async (req, res) => {
   res.json(await PlaceModel.find())
 })
 
-app.post('/booking', (req, res) => {
-  const { place, checkIn, checkOut, maxGuests, name, phone, price } = req.body
+app.post('/bookings', async (req, res) => {
+  const userData = await getUserDataFromReq(req)
+  const { place, checkIn, checkOut, numberOfGuests, name, phone, price } =
+    req.body
 
   BookingModel.create({
     place,
+    user: userData.id,
     checkIn,
     checkOut,
-    maxGuests,
+    numberOfGuests,
     name,
     phone,
     price
-  }).then((err, doc) => {
-    if (err) throw err
-    res.json(doc)
   })
+    .then(doc => {
+      res.json(doc)
+    })
+    .catch(err => {
+      throw err
+    })
+})
+
+const getUserDataFromReq = req => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(req.cookies.token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err
+      resolve(userData)
+    })
+  })
+}
+
+// get all bookigs
+app.get('/bookings', async (req, res) => {
+  const userData = await getUserDataFromReq(req)
+  res.json(await BookingModel.find({ user: userData.id }).populate('place'))
 })
 
 app.get('/test', async (req, res) => {
