@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken'
 import imageDownloader from 'image-downloader'
 import { config } from 'dotenv'
 import { UserModel } from './models/User.js'
+import { BookingModel } from './models/Booking.js'
 import cookieParser from 'cookie-parser'
 // packaging managment
 import multer from 'multer'
@@ -159,7 +160,8 @@ app.post('/places', async (req, res) => {
     extraInfo,
     checkIn,
     checkOut,
-    maxGuests
+    maxGuests,
+    price
   } = req.body
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
     if (err) throw err
@@ -173,7 +175,8 @@ app.post('/places', async (req, res) => {
       extraInfo,
       checkIn,
       checkOut,
-      maxGuests
+      maxGuests,
+      price
     })
 
     res.json(placeDoc)
@@ -181,7 +184,7 @@ app.post('/places', async (req, res) => {
 })
 
 // get all places from user
-app.get('/places', async (req, res) => {
+app.get('/user-places', async (req, res) => {
   const { token } = req.cookies
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
     if (err) throw err
@@ -210,7 +213,8 @@ app.put('/places', async (req, res) => {
     extraInfo,
     checkIn,
     checkOut,
-    maxGuests
+    maxGuests,
+    price
   } = req.body
 
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
@@ -226,11 +230,34 @@ app.put('/places', async (req, res) => {
         extraInfo,
         checkIn,
         checkOut,
-        maxGuests
+        maxGuests,
+        price
       })
       await placeDoc.save()
       res.json('ok')
     }
+  })
+})
+
+// get places unauthenticated
+app.get('/places', async (req, res) => {
+  res.json(await PlaceModel.find())
+})
+
+app.post('/booking', (req, res) => {
+  const { place, checkIn, checkOut, maxGuests, name, phone, price } = req.body
+
+  BookingModel.create({
+    place,
+    checkIn,
+    checkOut,
+    maxGuests,
+    name,
+    phone,
+    price
+  }).then((err, doc) => {
+    if (err) throw err
+    res.json(doc)
   })
 })
 

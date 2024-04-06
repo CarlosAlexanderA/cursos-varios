@@ -7,7 +7,7 @@ import { baseUrl } from '../constants'
 export function PlacesPage() {
   const [places, setPlaces] = useState([])
   useEffect(() => {
-    axios.get('/places').then(({ data }) => {
+    axios.get('/user-places').then(({ data }) => {
       setPlaces(data)
     })
   }, [])
@@ -33,7 +33,7 @@ export function PlacesPage() {
           Add new place
         </Link>
       </div>
-      <div className="mt-4">
+      <div className="mt-4 flex flex-col gap-4">
         {places.length > 0 &&
           places.map((place, index) => (
             <Link
@@ -53,7 +53,9 @@ export function PlacesPage() {
               </div>
               <div>
                 <h2 className="text-xl font-medium">{place.title}</h2>
-                <p className="text-sm mt-2 ">{place.description}</p>
+                <p className="text-sm mt-2 line-clamp-4 ">
+                  {place.description}
+                </p>
               </div>
             </Link>
           ))}
