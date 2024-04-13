@@ -2,10 +2,11 @@ export default [
   {
     id: 'd11111d1',
     fullname: 'John Doe',
-    description: 'A simple web application built with React',
+    description:
+      'A simple web application built with React and more tools, for the best practices with midudev, a chanel of youtube',
     language: 'JavaScript',
     forksCount: 25,
-    stargazersCount: 102,
+    stargazersCount: 1020,
     ratingAverage: 4.5,
     reviewCount: 12,
     ownerAvatarUrl: 'https://ui-avatars.com/api/?background=0D8ABC&color=fff',
