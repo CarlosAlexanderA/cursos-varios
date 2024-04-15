@@ -3,6 +3,8 @@ import {StyleSheet, View} from 'react-native';
 import StyledText from './StyledText';
 import theme from '../theme';
 import Constants from 'expo-constants';
+
+// const AppBarTab = ({active, children, to}) => {};
 const AppBar = () => {
   return (
     <View style={styles.container}>
