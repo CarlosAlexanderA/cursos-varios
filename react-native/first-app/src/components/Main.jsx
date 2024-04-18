@@ -1,12 +1,17 @@
 import React from 'react';
-import {View} from 'react-native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Platform, View} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import RespositoryList from './RespositoryList';
-import {HomeScreen} from './HomeScreen';
 import AppBar from './AppBar';
+import LoginPage from '../pages/Login';
 
 const Tab = createMaterialTopTabNavigator();
+
+//! renderizar segun el so del movil
+// const AppBar = Platform.select({
+//   ios: () => require('./IOSAppBar').default,
+//   default: () => require('./AppBar').default,
+// })();
 
 const Main = () => {
   return (
@@ -22,12 +27,11 @@ const Main = () => {
       >
         <Tab.Screen
           name="home"
-          component={HomeScreen}
+          component={RespositoryList}
           options={{tabBarLabel: 'Home'}}
         />
-        <Tab.Screen name="list" component={RespositoryList} />
+        <Tab.Screen name="sing in" component={LoginPage} />
       </Tab.Navigator>
-      {/* <RespositoryList /> */}
     </View>
   );
 };

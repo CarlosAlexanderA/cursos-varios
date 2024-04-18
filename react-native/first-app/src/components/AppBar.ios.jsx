@@ -9,7 +9,7 @@ const AppBar = () => {
   return (
     <View style={styles.container}>
       <StyledText fontWeight={'bold'} style={styles.text}>
-        DEFAULT Repositories
+        IOS Repositories
       </StyledText>
     </View>
   );
@@ -17,7 +17,7 @@ const AppBar = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: theme.appBar.primary,
+    backgroundColor: 'red',
     paddingTop: Constants.statusBarHeight + 10,
     paddingBottom: 10,
     paddingLeft: 10,
