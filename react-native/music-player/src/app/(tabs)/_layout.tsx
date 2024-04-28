@@ -8,7 +8,7 @@ import {
 import {BlurView} from 'expo-blur';
 import {Tabs} from 'expo-router';
 import {StyleSheet} from 'react-native';
-export default function TabasNavigation() {
+export default function TabsNavigation() {
   return (
     <Tabs
       screenOptions={{
@@ -24,7 +24,7 @@ export default function TabasNavigation() {
         },
         tabBarBackground: () => (
           <BlurView
-            intensity={20}
+            intensity={95}
             style={{
               ...StyleSheet.absoluteFillObject,
               overflow: 'hidden',

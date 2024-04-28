@@ -4,7 +4,9 @@ import {Text, View} from 'react-native';
 export default function FavoritesScreen() {
   return (
     <View style={defaultStyles.container}>
-      <Text style={defaultStyles.text}>Favorites Screen</Text>
+      <Text style={{color: 'white', fontSize: 30, fontWeight: 'bold'}}>
+        Favorites Screen kasdh
+      </Text>
     </View>
   );
 }

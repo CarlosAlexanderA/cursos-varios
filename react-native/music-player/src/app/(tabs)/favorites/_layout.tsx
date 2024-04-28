@@ -9,7 +9,10 @@ export default function FavoritesScreenLayout() {
       <Stack>
         <Stack.Screen
           name="index"
-          options={{...StackScreenWithSearchBar, headerTitle: 'Favorites'}}
+          options={{
+            ...StackScreenWithSearchBar,
+            headerTitle: 'Favorites',
+          }}
         />
       </Stack>
     </View>
