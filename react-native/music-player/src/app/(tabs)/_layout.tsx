@@ -24,7 +24,9 @@ export default function TabsNavigation() {
         },
         tabBarBackground: () => (
           <BlurView
-            intensity={95}
+            intensity={80}
+            tint="dark"
+            experimentalBlurMethod="dimezisBlurView"
             style={{
               ...StyleSheet.absoluteFillObject,
               overflow: 'hidden',

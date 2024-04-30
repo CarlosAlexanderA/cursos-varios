@@ -13,6 +13,20 @@ export default function FavoritesScreenLayout() {
             ...StackScreenWithSearchBar,
             headerTitle: 'Favorites',
           }}
+          // options={{
+          //   headerLargeTitle: true,
+          //   headerTitle: 'Favorites',
+          //   statusBarStyle: 'light',
+          //   statusBarTranslucent: true,
+          //   headerStyle: {
+          //     backgroundColor: '#000',
+          //   },
+          //   headerTitleStyle: {
+          //     color: '#fff',
+          //     fontSize: 32,
+          //     fontWeight: '900',
+          //   },
+          // }}
         />
       </Stack>
     </View>
