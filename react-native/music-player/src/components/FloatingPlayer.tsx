@@ -1,18 +1,28 @@
 import {unknownTrachUri} from '@/constants/images';
+import {useLastActiveTrack} from '@/hooks/useLastActiveTrack';
 import {defaultStyles} from '@/styles';
-import {StyleSheet, Text, TouchableOpacityComponent, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewProps,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {useActiveTrack} from 'react-native-track-player';
+import {PlayPauseButton, SkipToNextButton} from './PlayerControls';
 
-export default function FloatingPlayer() {
+export function FloatingPlayer({style}: ViewProps) {
   const activeTrack = useActiveTrack();
+  const lastActiveTrack = useLastActiveTrack();
 
-  if (!activeTrack) return null;
+  const displayedTrack = activeTrack ?? lastActiveTrack;
 
-  const displayedTrack = activeTrack;
+  if (!displayedTrack) return null;
 
   return (
-    <TouchableOpacityComponent>
+    // <Text>Hello</Text>
+    <TouchableOpacity activeOpacity={0.9} style={[styles.container, style]}>
       <>
         <FastImage
           source={{uri: displayedTrack.artwork ?? unknownTrachUri}}
@@ -21,16 +31,24 @@ export default function FloatingPlayer() {
         <View style={styles.trackTitleContainer}>
           <Text style={styles.trackTitle}>{displayedTrack.title}</Text>
         </View>
-        <View>
-          <PlayPauseButton size={24} />
-          <SkipToNextButton size={22} />
+        <View style={styles.trackControlsContainer}>
+          <PlayPauseButton iconSize={24} />
+          <SkipToNextButton iconSize={22} />
         </View>
       </>
-    </TouchableOpacityComponent>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#252525',
+    padding: 8,
+    borderRadius: 12,
+    paddingVertical: 10,
+  },
   trackArtWorkImage: {
     width: 40,
     height: 40,
